@@ -13,10 +13,10 @@ public class RegisterDto
 
     [Required]
     [RegularExpression(
-        "(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$",
+        "(?=^.{6,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$",
         ErrorMessage =
             "Password must have at least: " +
-            "1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character " + 
+            "1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character " +
             "and 6 characters")]
     public required string Password { get; set; }
 }
