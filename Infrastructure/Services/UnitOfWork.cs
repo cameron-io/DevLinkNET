@@ -7,7 +7,7 @@ using Infrastructure.Repositories;
 
 namespace Infrastructure.Services;
 
-public class UnitOfWork(DataContext context) : IUnitOfWork
+public sealed class UnitOfWork(DataContext context) : IUnitOfWork
 {
     private readonly DataContext _context = context;
     private Hashtable _repositories;
@@ -16,6 +16,7 @@ public class UnitOfWork(DataContext context) : IUnitOfWork
     {
         return await _context.SaveChangesAsync() > 0;
     }
+
     public bool HasChanges()
     {
         return _context.ChangeTracker.HasChanges();
@@ -40,6 +41,6 @@ public class UnitOfWork(DataContext context) : IUnitOfWork
             _repositories.Add(type, repositoryInstance);
         }
 
-        return (IGenericRepository<TEntity>) _repositories[type];
+        return (IGenericRepository<TEntity>)_repositories[type];
     }
 }
