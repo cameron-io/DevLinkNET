@@ -1,6 +1,6 @@
 
 .PHONY: dev
-dev: migrate
+dev:
 	dotnet watch --project API --no-hot-reload
 
 .PHONY: migrate
