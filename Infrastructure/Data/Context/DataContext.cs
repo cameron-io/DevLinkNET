@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Context;
 
-public class DataContext(DbContextOptions options) : 
+public class DataContext(DbContextOptions options) :
     IdentityDbContext<
-        AppUser, AppRole, int,  IdentityUserClaim<int>, AppUserRole, 
+        AppUser, AppRole, int, IdentityUserClaim<int>, AppUserRole,
         IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>(options)
 {
     public DbSet<Profile> Profiles { get; set; }
@@ -18,7 +18,7 @@ public class DataContext(DbContextOptions options) :
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
+
         builder.Entity<AppUser>()
             .HasMany(ur => ur.UserRoles)
             .WithOne(u => u.User)
@@ -31,7 +31,6 @@ public class DataContext(DbContextOptions options) :
             .HasForeignKey(ur => ur.RoleId)
             .IsRequired();
 
-        
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
