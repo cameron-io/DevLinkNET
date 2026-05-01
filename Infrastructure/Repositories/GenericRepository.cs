@@ -4,6 +4,7 @@ using Domain.Specifications;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Data.Context;
 using Infrastructure.Specifications;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories;
 
@@ -12,27 +13,31 @@ public class GenericRepository<T>(DataContext context)
 {
     private readonly DataContext _context = context;
 
-    public virtual void Add(T entity)
+    public virtual async Task AddAsync(T entity)
     {
         _context.Set<T>().Add(entity);
+        await _context.SaveChangesAsync();
     }
-    
-    public virtual void Update(T entity)
+
+    public virtual async Task UpdateAsync(T entity)
     {
         _context.Set<T>().Attach(entity);
         _context.Entry(entity).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
     }
 
-    public virtual void Upsert(T entity)
+    public virtual async Task UpsertAsync(T entity)
     {
         _context.Entry(entity).State = entity.Id == 0 ?
                                    EntityState.Added :
                                    EntityState.Modified;
+        await _context.SaveChangesAsync();
     }
-    
-    public virtual void Delete(T entity)
+
+    public virtual async Task DeleteAsync(T entity)
     {
         _context.Set<T>().Remove(entity);
+        await _context.SaveChangesAsync();
     }
 
     public virtual async Task<int> CountAsync(ISpecification<T> spec)

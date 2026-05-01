@@ -67,14 +67,12 @@ public class ProfileController(
     public async Task<ActionResult<ProfileDto>> UpsertProfile(ProfileDto profileDto)
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-
         var profile = DtoMapper.ToProfileMap(profileDto);
 
         profile.AppUser = user;
+        profileService.UpsertAsync(profile);
 
-        if (await profileService.UpsertAsync(profile)) return DtoMapper.ToProfileDTOMap(profile);
-
-        return BadRequest("Failed to update user profile");
+        return DtoMapper.ToProfileDTOMap(profile);
     }
 
     [Authorize]
@@ -87,12 +85,9 @@ public class ProfileController(
 
         experience.Profile = profile;
 
-        if (await profileService.UpsertExperienceAsync(experience))
-        {
-            var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
-            return DtoMapper.ToProfileDTOMap(newProfile);
-        }
-        return BadRequest("Failed to update user profile");
+        profileService.UpsertExperienceAsync(experience);
+        var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
+        return DtoMapper.ToProfileDTOMap(newProfile);
     }
 
     [Authorize]
@@ -104,38 +99,28 @@ public class ProfileController(
         var education = DtoMapper.ToEducationMap(educationDto);
 
         education.Profile = profile;
-
-        if (await profileService.UpsertEducationAsync(education))
-        {
-            var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
-            return DtoMapper.ToProfileDTOMap(newProfile);
-        }
-        return BadRequest("Failed to update user profile");
+        profileService.UpsertEducationAsync(education);
+        var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
+        return DtoMapper.ToProfileDTOMap(newProfile);
     }
 
     [Authorize]
     [HttpDelete("experience/{id}")]
     public async Task<ActionResult<ProfileDto>> DeleteExperience(int id)
     {
-        if (await profileService.DeleteExperienceAsync(id))
-        {
-            var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-            var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
-            return DtoMapper.ToProfileDTOMap(newProfile);
-        }
-        return BadRequest("Failed to update user profile");
+        profileService.DeleteExperienceAsync(id);
+        var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
+        var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
+        return DtoMapper.ToProfileDTOMap(newProfile);
     }
 
     [Authorize]
     [HttpDelete("education/{id}")]
-    public async Task<ActionResult<ProfileDto>> DeleteEducation(int id)
+    public async Task<ActionResult<ProfileDto>> DeleteEducationAsync(int id)
     {
-        if (await profileService.DeleteEducationAsync(id))
-        {
-            var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
-            var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
-            return DtoMapper.ToProfileDTOMap(newProfile);
-        }
-        return BadRequest("Failed to update user profile");
+        profileService.DeleteEducationAsync(id);
+        var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
+        var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
+        return DtoMapper.ToProfileDTOMap(newProfile);
     }
 }

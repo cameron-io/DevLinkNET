@@ -49,7 +49,7 @@ public class Seed
             await userManager.AddToRoleAsync(user, "Member");
 
             profile.AppUser = user;
-            await profileService.UpsertAsync(profile);
+            profileService.UpsertAsync(profile);
         }
 
         var admin = new AppUser

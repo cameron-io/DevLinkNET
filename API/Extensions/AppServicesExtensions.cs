@@ -34,7 +34,6 @@ public static class AppServicesExtensions
             });
         });
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped(typeof(ITokenService<>), typeof(TokenService<>));

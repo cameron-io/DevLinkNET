@@ -10,9 +10,9 @@ namespace Domain.Repositories
         Task<T> GetEntityWithSpecAsync(ISpecification<T> spec);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
         Task<int> CountAsync(ISpecification<T> spec);
-        void Add(T entity);
-        void Update(T entity);
-        void Upsert(T entity);
-        void Delete(T entity);
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task UpsertAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }
