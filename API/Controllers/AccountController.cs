@@ -43,7 +43,8 @@ public class AccountController(
 
         if (!result.Succeeded) return Unauthorized(new ApiResponse(401));
 
-        Response.Cookies.Append("token", tokenService.CreateToken(user), new CookieOptions {
+        Response.Cookies.Append("token", tokenService.CreateToken(user), new CookieOptions
+        {
             Expires = DateTime.Now.AddHours(3),
             HttpOnly = true
         });
@@ -64,8 +65,8 @@ public class AccountController(
     {
         if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
         {
-            return new BadRequestObjectResult(new ApiValidationErrorResponse 
-                { Errors = ["Email address is in use"] });
+            return new BadRequestObjectResult(new ApiValidationErrorResponse
+            { Errors = ["Email address is in use"] });
         }
 
         var user = new AppUser
@@ -91,13 +92,13 @@ public class AccountController(
     {
         return await userManager.FindByEmailAsync(email) != null;
     }
-    
+
     [HttpDelete]
     public async Task<ActionResult<bool>> DeleteAccount()
     {
         var user = await userManager.FindByEmailFromClaimsPrincipal(User);
         var result = await userManager.DeleteAsync(user);
-        
+
         if (!result.Succeeded) return BadRequest(new ApiResponse(400));
 
         return NoContent();

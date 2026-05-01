@@ -19,10 +19,6 @@ public static class AppServicesExtensions
         // Infrastructure
 
         services.AddSingleton<IResponseCacheService, ResponseCacheService>();
-        services.AddDbContext<DataContext>(opt =>
-        {
-            opt.UseNpgsql(config.GetConnectionString("PostgreSqlConnection"));
-        });
         services.AddSingleton<IConnectionMultiplexer>(c =>
         {
             var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
