@@ -1,7 +1,6 @@
 using API.Errors;
 using Domain.Services;
 using Domain.Repositories;
-using Infrastructure.Data.Context;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -34,8 +33,6 @@ public static class AppServicesExtensions
                 policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
             });
         });
-
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

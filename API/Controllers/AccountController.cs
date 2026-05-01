@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Entities;
 using Infrastructure.Services;
 using API.Dtos.Account;
+using API.Dtos;
 using API.Errors;
 using API.Extensions;
 
@@ -24,12 +25,7 @@ public class AccountController(
 
         if (user == null) return Unauthorized(new ApiResponse(401));
 
-        return new UserDto
-        {
-            Email = user.Email,
-            Token = tokenService.CreateToken(user),
-            Name = user.Name
-        };
+        return DtoMapper.ToUserDTOMap(user);
     }
 
     [HttpPost("login")]

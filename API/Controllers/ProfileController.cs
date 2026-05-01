@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 using Domain.Entities;
 using Domain.Services;
 using API.Dtos.Profile;
+using API.Dtos;
 using API.Extensions;
 
 namespace API.Controllers;
@@ -13,11 +13,9 @@ namespace API.Controllers;
 [Route("api/profiles")]
 public class ProfileController(
     UserManager<AppUser> userManager,
-    IMapper mapper,
     IProfileService profileService
 ) : ControllerBase
 {
-    private readonly IMapper _mapper = mapper;
     private readonly UserManager<AppUser> _userManager = userManager;
 
     [HttpGet]
@@ -28,7 +26,7 @@ public class ProfileController(
         if (profiles == null) return NotFound();
 
         return Ok(
-            _mapper.Map<IReadOnlyList<Domain.Entities.Profile>, IReadOnlyList<ProfileDto>>(profiles)
+           profiles.Select(DtoMapper.ToProfileDTOMap).ToList()
         );
     }
 
@@ -39,7 +37,7 @@ public class ProfileController(
 
         if (profile == null) return NotFound();
 
-        return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
+        return DtoMapper.ToProfileDTOMap(profile);
     }
 
     [HttpGet("user/{id}")]
@@ -49,7 +47,7 @@ public class ProfileController(
 
         if (profile == null) return NotFound();
 
-        return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
+        return DtoMapper.ToProfileDTOMap(profile);
     }
 
     [Authorize]
@@ -61,7 +59,7 @@ public class ProfileController(
 
         if (profile == null) return NotFound();
 
-        return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
+        return DtoMapper.ToProfileDTOMap(profile);
     }
 
     [Authorize]
@@ -70,11 +68,11 @@ public class ProfileController(
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
 
-        var profile = _mapper.Map<ProfileDto, Domain.Entities.Profile>(profileDto);
+        var profile = DtoMapper.ToProfileMap(profileDto);
 
         profile.AppUser = user;
 
-        if (await profileService.UpsertAsync(profile)) return _mapper.Map<Domain.Entities.Profile, ProfileDto>(profile);
+        if (await profileService.UpsertAsync(profile)) return DtoMapper.ToProfileDTOMap(profile);
 
         return BadRequest("Failed to update user profile");
     }
@@ -85,14 +83,14 @@ public class ProfileController(
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
         var profile = await profileService.GetProfileByUserIdAsync(user.Id);
-        var experience = _mapper.Map<ExperienceDto, Experience>(experienceDto);
+        var experience = DtoMapper.ToExperienceMap(experienceDto);
 
         experience.Profile = profile;
 
         if (await profileService.UpsertExperienceAsync(experience))
         {
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
-            return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
+            return DtoMapper.ToProfileDTOMap(newProfile);
         }
         return BadRequest("Failed to update user profile");
     }
@@ -103,14 +101,14 @@ public class ProfileController(
     {
         var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
         var profile = await profileService.GetProfileByUserIdAsync(user.Id);
-        var education = _mapper.Map<EducationDto, Education>(educationDto);
+        var education = DtoMapper.ToEducationMap(educationDto);
 
         education.Profile = profile;
 
         if (await profileService.UpsertEducationAsync(education))
         {
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
-            return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
+            return DtoMapper.ToProfileDTOMap(newProfile);
         }
         return BadRequest("Failed to update user profile");
     }
@@ -123,7 +121,7 @@ public class ProfileController(
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
-            return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
+            return DtoMapper.ToProfileDTOMap(newProfile);
         }
         return BadRequest("Failed to update user profile");
     }
@@ -136,7 +134,7 @@ public class ProfileController(
         {
             var user = await _userManager.FindByEmailFromClaimsPrincipal(User);
             var newProfile = await profileService.GetProfileByUserIdAsync(user.Id);
-            return _mapper.Map<Domain.Entities.Profile, ProfileDto>(newProfile);
+            return DtoMapper.ToProfileDTOMap(newProfile);
         }
         return BadRequest("Failed to update user profile");
     }

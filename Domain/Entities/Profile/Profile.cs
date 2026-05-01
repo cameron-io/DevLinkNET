@@ -9,7 +9,7 @@ public class Profile : BaseEntity
     public string Website { get; set; }
     public string Location { get; set; }
     public string Bio { get; set; }
-    public string Githubusername { get; set; }
+    public string GitHubUsername { get; set; }
     public List<Experience> Experience { get; set; } = [];
     public List<Education> Education { get; set; } = [];
     public List<Social> Social { get; set; } = [];
