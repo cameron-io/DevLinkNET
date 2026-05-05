@@ -25,6 +25,7 @@ else
 }
 
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 builder.Services.AddAppServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddSwaggerGen();
