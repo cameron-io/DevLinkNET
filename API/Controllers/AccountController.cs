@@ -7,6 +7,7 @@ using API.Dtos.Account;
 using API.Dtos;
 using API.Errors;
 using API.Extensions;
+using API.Utilities;
 
 namespace API.Controllers;
 
@@ -69,7 +70,8 @@ public class AccountController(
         {
             Name = registerDto.Name,
             Email = registerDto.Email,
-            UserName = registerDto.Email
+            UserName = registerDto.Email,
+            AvatarUrl = Gravatar.GetGravatarUrl(registerDto.Email)
         };
 
         var result = await userManager.CreateAsync(user, registerDto.Password);

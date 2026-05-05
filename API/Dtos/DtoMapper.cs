@@ -12,7 +12,8 @@ public class DtoMapper
         {
             Id = user.Id,
             Email = user.Email,
-            Name = user.Name
+            Name = user.Name,
+            Avatar = user.AvatarUrl
         };
     }
 
@@ -62,7 +63,8 @@ public class DtoMapper
             {
                 Id = profile.AppUser.Id,
                 Name = profile.AppUser.Name,
-                Email = profile.AppUser.Email
+                Email = profile.AppUser.Email,
+                Avatar = profile.AppUser.AvatarUrl
             }
         };
     }
