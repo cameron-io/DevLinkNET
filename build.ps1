@@ -21,7 +21,7 @@ function dev {
 
 function migrate {
     param(
-        [string]$Name = "InitialCreate"
+        [string]$Name
     )
 
     if (-not $Arg) {
