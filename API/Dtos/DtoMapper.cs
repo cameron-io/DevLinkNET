@@ -51,21 +51,8 @@ public class DtoMapper
                 Current = ed.Current,
                 Description = ed.Description
             })],
-            Social = [.. profile.Social.Select(s => new SocialDto()
-            {
-                YouTube = s.YouTube,
-                Twitter = s.Twitter,
-                Facebook = s.Facebook,
-                LinkedIn = s.LinkedIn,
-                Instagram = s.Instagram
-            })],
-            User = new UserDto()
-            {
-                Id = profile.AppUser.Id,
-                Name = profile.AppUser.Name,
-                Email = profile.AppUser.Email,
-                Avatar = profile.AppUser.AvatarUrl
-            }
+            Social = profile.Social == null ? null : ToSocialDTOMap(profile.Social),
+            User = ToUserDTOMap(profile.AppUser)
         };
     }
 
@@ -81,36 +68,9 @@ public class DtoMapper
             Location = profileDto.Location,
             Bio = profileDto.Bio,
             GitHubUsername = profileDto.GitHubUsername,
-            Experience = [.. profileDto.Experience.Select(e => new Experience()
-            {
-                Id = e.Id,
-                Title = e.Title,
-                Company = e.Company,
-                Location = e.Location,
-                From = e.From,
-                To = e.To,
-                Current = e.Current,
-                Description = e.Description
-            })],
-            Education = [.. profileDto.Education.Select(ed => new Education()
-            {
-                Id = ed.Id,
-                School = ed.School,
-                Degree = ed.Degree,
-                FieldOfStudy = ed.FieldOfStudy,
-                From = ed.From,
-                To = ed.To,
-                Current = ed.Current,
-                Description = ed.Description
-            })],
-            Social = [.. profileDto.Social.Select(s => new Social()
-            {
-                YouTube = s.YouTube,
-                Twitter = s.Twitter,
-                Facebook = s.Facebook,
-                LinkedIn = s.LinkedIn,
-                Instagram = s.Instagram
-            })]
+            Experience = [.. profileDto.Experience.Select(ToExperienceMap)],
+            Education = [.. profileDto.Education.Select(ToEducationMap)],
+            Social = ToSocialMap(profileDto.Social)
         };
     }
 
@@ -177,6 +137,18 @@ public class DtoMapper
     public static SocialDto ToSocialDTOMap(Social social)
     {
         return new SocialDto()
+        {
+            YouTube = social.YouTube,
+            Twitter = social.Twitter,
+            Facebook = social.Facebook,
+            LinkedIn = social.LinkedIn,
+            Instagram = social.Instagram
+        };
+    }
+
+    public static Social ToSocialMap(SocialDto social)
+    {
+        return new Social()
         {
             YouTube = social.YouTube,
             Twitter = social.Twitter,

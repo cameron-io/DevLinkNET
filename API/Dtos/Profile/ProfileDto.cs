@@ -18,6 +18,6 @@ public class ProfileDto
     public string GitHubUsername { get; set; }
     public List<ExperienceDto> Experience { get; set; } = [];
     public List<EducationDto> Education { get; set; } = [];
-    public List<SocialDto> Social { get; set; } = [];
+    public SocialDto Social { get; set; }
     public UserDto User { get; set; }
 }
