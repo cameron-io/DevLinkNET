@@ -15,6 +15,14 @@
 
 ## Getting Started
 
+### Makefile
+
 ```bash
 make dev
+```
+
+### Powershell
+
+```powershell
+.\build.ps1 dev
 ```
